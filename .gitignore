@@ -1,0 +1,28 @@
+# Binary
+editor
+
+# Object files
+*.o
+
+# Dependency files
+*.d
+
+# Build logs / core dumps
+*.log
+*.out
+*.core
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# VS Code config
+.vscode/
+
+# Backup files
+*~
+*.swp
+
+*.exe
