@@ -13,7 +13,26 @@ void Editor::insertChar(char c) {
 }
 
 void Editor::display() {
-    for (char c : text)
-        std::cout << c;
+    for (auto it = text.begin(); it != text.end(); ++it) {
+        if (it == cursor)
+            std::cout << '|';  // ตำแหน่ง cursor
+        std::cout << *it;
+    }
+    if (cursor == text.end())
+        std::cout << '|'; // cursor ที่ท้ายข้อความ
     std::cout << '\n';
+}
+
+
+//ป้องกันไม่ให้ cursor เลยขอบ list ด้วยการเช็ค cursor != begin()/end() ก่อนขยับ
+void Editor::moveCursorLeft() {
+    if (cursor != text.begin()) {
+        --cursor; // ขยับ cursor ไปทางซ้าย
+    }
+}
+
+void Editor::moveCursorRight() {
+    if (cursor != text.end()) {
+        ++cursor; // ขยับ cursor ไปทางขวา
+    }
 }

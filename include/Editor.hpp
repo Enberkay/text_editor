@@ -3,13 +3,21 @@
 #include <list>
 #include <stack>
 
-class Editor {
+class Editor
+{
 private:
     std::list<char> text;
     std::list<char>::iterator cursor;
 
 public:
-    Editor();                       // Constructor
-    void insertChar(char c);       // ใส่ตัวอักษร
-    void display();                // แสดงข้อความ
+    // Constructor
+    Editor();
+
+    void insertChar(char c); // ใส่ตัวอักษร
+
+    // ขยับ cursor
+    void moveCursorRight();  
+    void moveCursorLeft();
+    
+    void display();          // แสดงข้อความ
 };
