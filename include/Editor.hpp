@@ -18,6 +18,8 @@ public:
     // ขยับ cursor
     void moveCursorRight();  
     void moveCursorLeft();
-    
+
+    void deleteChar();
+
     void display();          // แสดงข้อความ
 };

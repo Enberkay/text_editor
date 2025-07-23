@@ -36,3 +36,12 @@ void Editor::moveCursorRight() {
         ++cursor; // ขยับ cursor ไปทางขวา
     }
 }
+
+void Editor::deleteChar() {
+    if (cursor != text.begin()) {
+        // ถอย cursor กลับมาก่อน 1 ตัว
+        auto toDelete = cursor;
+        --toDelete;
+        cursor = text.erase(toDelete);  // ลบ แล้วคืน iterator ถัดไป
+    }
+}

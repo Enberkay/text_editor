@@ -15,8 +15,17 @@ int main() {
     editor.moveCursorLeft();
     editor.display(); // Hel|lo
 
-    editor.insertChar('X');
-    editor.display(); // HelX|lo
+    editor.deleteChar(); // ลบ l
+    editor.display();    // He|lo
+
+    editor.deleteChar(); // ลบ e
+    editor.display();    // H|lo
+
+    editor.deleteChar(); // ลบ H
+    editor.display();    // |lo
+
+    editor.deleteChar(); // ไม่มีอะไรให้ลบ
+    editor.display();    // |lo
 
     return 0;
 }
