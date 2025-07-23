@@ -1,5 +1,5 @@
-
 #include "Editor.hpp"
+#include "Command.hpp"
 #include <iostream>
 
 Editor::Editor() {
@@ -8,40 +8,56 @@ Editor::Editor() {
 }
 
 void Editor::insertChar(char c) {
-    cursor = text.insert(cursor, c); // แทรกก่อน cursor
-    ++cursor;                        // ขยับ cursor ไปข้างหน้า
+    Command* cmd = new InsertCommand(c);
+    cmd->execute(*this);
+    undoStack.push(cmd);
+    while (!redoStack.empty()) redoStack.pop();
 }
 
-void Editor::display() {
-    for (auto it = text.begin(); it != text.end(); ++it) {
-        if (it == cursor)
-            std::cout << '|';  // ตำแหน่ง cursor
-        std::cout << *it;
-    }
-    if (cursor == text.end())
-        std::cout << '|'; // cursor ที่ท้ายข้อความ
-    std::cout << '\n';
+void Editor::deleteChar() {
+    Command* cmd = new DeleteCommand();
+    cmd->execute(*this);
+    undoStack.push(cmd);
+    while (!redoStack.empty()) redoStack.pop();
 }
 
-
-//ป้องกันไม่ให้ cursor เลยขอบ list ด้วยการเช็ค cursor != begin()/end() ก่อนขยับ
 void Editor::moveCursorLeft() {
     if (cursor != text.begin()) {
-        --cursor; // ขยับ cursor ไปทางซ้าย
+        --cursor;
     }
 }
 
 void Editor::moveCursorRight() {
     if (cursor != text.end()) {
-        ++cursor; // ขยับ cursor ไปทางขวา
+        ++cursor;
     }
 }
 
-void Editor::deleteChar() {
-    if (cursor != text.begin()) {
-        // ถอย cursor กลับมาก่อน 1 ตัว
-        auto toDelete = cursor;
-        --toDelete;
-        cursor = text.erase(toDelete);  // ลบ แล้วคืน iterator ถัดไป
+void Editor::undo() {
+    if (!undoStack.empty()) {
+        Command* cmd = undoStack.top();
+        undoStack.pop();
+        cmd->undo(*this);
+        redoStack.push(cmd);
     }
+}
+
+void Editor::redo() {
+    if (!redoStack.empty()) {
+        Command* cmd = redoStack.top();
+        redoStack.pop();
+        cmd->execute(*this);
+        undoStack.push(cmd);
+    }
+}
+
+void Editor::display() {
+    for (auto it = text.begin(); it != text.end(); ++it) {
+        if (it == cursor)
+            std::cout << '|';
+        std::cout << *it;
+    }
+    if (cursor == text.end())
+        std::cout << '|';
+    std::cout << '\n';
 }

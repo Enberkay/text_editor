@@ -2,7 +2,7 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -Iinclude
 
-SRC = src/main.cpp src/Editor.cpp
+SRC = src/main.cpp src/Editor.cpp src/Command.cpp
 OBJ = $(SRC:.cpp=.o)
 EXEC = editor
 
