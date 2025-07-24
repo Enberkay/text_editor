@@ -22,16 +22,19 @@ void Editor::deleteChar() {
 }
 
 void Editor::moveCursorLeft() {
-    if (cursor != text.begin()) {
-        --cursor;
-    }
+    Command* cmd = new MoveCursorCommand(false);
+    cmd->execute(*this);
+    undoStack.push(cmd);
+    while (!redoStack.empty()) redoStack.pop();
 }
 
 void Editor::moveCursorRight() {
-    if (cursor != text.end()) {
-        ++cursor;
-    }
+    Command* cmd = new MoveCursorCommand(true);
+    cmd->execute(*this);
+    undoStack.push(cmd);
+    while (!redoStack.empty()) redoStack.pop();
 }
+
 
 void Editor::undo() {
     if (!undoStack.empty()) {

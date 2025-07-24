@@ -37,3 +37,20 @@ void DeleteCommand::undo(Editor& editor) {
     }
 }
 
+// ========== MoveCursorCommand ==========
+
+MoveCursorCommand::MoveCursorCommand(bool right) : moveRight(right) {}
+
+void MoveCursorCommand::execute(Editor& editor) {
+    prevPos = editor.cursor;
+    if (moveRight && editor.cursor != editor.text.end()) {
+        ++editor.cursor;
+    } else if (!moveRight && editor.cursor != editor.text.begin()) {
+        --editor.cursor;
+    }
+    newPos = editor.cursor;
+}
+
+void MoveCursorCommand::undo(Editor& editor) {
+    editor.cursor = prevPos;
+}

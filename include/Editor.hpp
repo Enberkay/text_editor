@@ -27,4 +27,5 @@ public:
 
     friend class InsertCommand;
     friend class DeleteCommand;
+    friend class MoveCursorCommand;
 };

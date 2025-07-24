@@ -34,3 +34,14 @@ public:
     void execute(Editor& editor) override;
     void undo(Editor& editor) override;
 };
+
+class MoveCursorCommand : public Command {
+    std::list<char>::iterator prevPos;
+    std::list<char>::iterator newPos;
+    bool moveRight;
+
+public:
+    MoveCursorCommand(bool right);
+    void execute(Editor& editor) override;
+    void undo(Editor& editor) override;
+};
