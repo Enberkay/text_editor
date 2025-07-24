@@ -14,6 +14,14 @@ void Editor::insertChar(char c) {
     while (!redoStack.empty()) redoStack.pop();
 }
 
+void Editor::insertString(const std::string& str) {
+    Command* cmd = new InsertStringCommand(str);
+    cmd->execute(*this);
+    undoStack.push(cmd);
+    while (!redoStack.empty()) redoStack.pop();
+}
+
+
 void Editor::deleteChar() {
     Command* cmd = new DeleteCommand();
     cmd->execute(*this);

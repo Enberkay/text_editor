@@ -1,5 +1,7 @@
 #pragma once
 #include <list>
+#include <vector>
+#include <string>
 
 class Editor; // forward declaration
 
@@ -18,6 +20,17 @@ class InsertCommand : public Command {
 
 public:
     InsertCommand(char c);
+    void execute(Editor& editor) override;
+    void undo(Editor& editor) override;
+};
+
+class InsertStringCommand : public Command {
+    std::vector<InsertCommand*> commands;
+
+public:
+    InsertStringCommand(const std::string& str);
+    ~InsertStringCommand();
+
     void execute(Editor& editor) override;
     void undo(Editor& editor) override;
 };

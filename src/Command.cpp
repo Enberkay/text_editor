@@ -1,5 +1,6 @@
 #include "Command.hpp"
 #include "Editor.hpp"
+#include <string>
 
 // ========== InsertCommand ==========
 
@@ -53,4 +54,27 @@ void MoveCursorCommand::execute(Editor& editor) {
 
 void MoveCursorCommand::undo(Editor& editor) {
     editor.cursor = prevPos;
+}
+
+InsertStringCommand::InsertStringCommand(const std::string& str) {
+    for (char ch : str) {
+        commands.push_back(new InsertCommand(ch));
+    }
+}
+
+InsertStringCommand::~InsertStringCommand() {
+    for (auto cmd : commands)
+        delete cmd;
+}
+
+void InsertStringCommand::execute(Editor& editor) {
+    for (auto cmd : commands) {
+        cmd->execute(editor);
+    }
+}
+
+void InsertStringCommand::undo(Editor& editor) {
+    for (auto it = commands.rbegin(); it != commands.rend(); ++it) {
+        (*it)->undo(editor);
+    }
 }

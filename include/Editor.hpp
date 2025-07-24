@@ -17,6 +17,7 @@ public:
 
     void insertChar(char c);
     void deleteChar();
+    void insertString(const std::string& str);
 
     void moveCursorRight();
     void moveCursorLeft();

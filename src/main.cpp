@@ -3,26 +3,35 @@
 int main() {
     Editor editor;
 
-    editor.insertChar('A');
-    editor.insertChar('B');
-    editor.insertChar('C');
-    editor.display(); // ABC|
+    editor.insertString("Hi");
+    editor.display();  // Hi|
 
-    editor.moveCursorLeft();
-    editor.moveCursorLeft();
-    editor.display(); // A|BC
+    editor.insertChar('!');
+    editor.display();  // Hi!|
 
-    editor.undo();
-    editor.display(); // AB|C ← ย้อน cursor ไปขวา
+    editor.undo();     // undo '!'
+    editor.display();  // Hi|
 
-    editor.undo();
-    editor.display(); // ABC| ← ย้อนอีกครั้ง
+    editor.undo();     // undo "Hi"
+    editor.display();  // |
 
-    editor.redo();
-    editor.display(); // AB|C
+    editor.redo();     // redo "Hi"
+    editor.display();  // Hi|
 
-    editor.redo();
-    editor.display(); // A|BC
+    editor.redo();     // redo '!'
+    editor.display();  // Hi!|
 
     return 0;
 }
+
+/*
+
+Hi|
+Hi!|
+Hi|
+|
+Hi|
+Hi!|
+
+
+*/
