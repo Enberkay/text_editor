@@ -9,59 +9,61 @@ Editor::Editor() {
 }
 
 void Editor::insertChar(char c) {
-    Command* cmd = new InsertCommand(c);
+    auto cmd = std::make_unique<InsertCommand>(c);
     cmd->execute(*this);
-    undoStack.push(cmd);
+    undoStack.push(std::move(cmd));
     while (!redoStack.empty()) redoStack.pop();
 }
-
-void Editor::insertString(const std::string& str) {
-    Command* cmd = new InsertStringCommand(str);
-    cmd->execute(*this);
-    undoStack.push(cmd);
-    while (!redoStack.empty()) redoStack.pop();
-}
-
 
 void Editor::deleteChar() {
-    Command* cmd = new DeleteCommand();
+    auto cmd = std::make_unique<DeleteCommand>();
     cmd->execute(*this);
-    undoStack.push(cmd);
+    undoStack.push(std::move(cmd));
     while (!redoStack.empty()) redoStack.pop();
 }
 
+
 void Editor::moveCursorLeft() {
-    Command* cmd = new MoveCursorCommand(false);
+    auto cmd = std::make_unique<MoveCursorCommand>(false);
     cmd->execute(*this);
-    undoStack.push(cmd);
+    undoStack.push(std::move(cmd));
     while (!redoStack.empty()) redoStack.pop();
 }
 
 void Editor::moveCursorRight() {
-    Command* cmd = new MoveCursorCommand(true);
+    auto cmd = std::make_unique<MoveCursorCommand>(true);
     cmd->execute(*this);
-    undoStack.push(cmd);
+    undoStack.push(std::move(cmd));
+    while (!redoStack.empty()) redoStack.pop();
+}
+
+
+void Editor::insertString(const std::string& str) {
+    auto cmd = std::make_unique<InsertStringCommand>(str);
+    cmd->execute(*this);
+    undoStack.push(std::move(cmd));
     while (!redoStack.empty()) redoStack.pop();
 }
 
 
 void Editor::undo() {
     if (!undoStack.empty()) {
-        Command* cmd = undoStack.top();
+        auto cmd = std::move(undoStack.top());
         undoStack.pop();
         cmd->undo(*this);
-        redoStack.push(cmd);
+        redoStack.push(std::move(cmd));
     }
 }
 
 void Editor::redo() {
     if (!redoStack.empty()) {
-        Command* cmd = redoStack.top();
+        auto cmd = std::move(redoStack.top());
         redoStack.pop();
         cmd->execute(*this);
-        undoStack.push(cmd);
+        undoStack.push(std::move(cmd));
     }
 }
+
 
 void Editor::display() {
     for (auto it = text.begin(); it != text.end(); ++it) {
@@ -95,8 +97,8 @@ void Editor::loadFromFile(const std::string& filename) {
     }
 
     text.clear();
-    undoStack = std::stack<Command*>(); // clear undo/redo
-    redoStack = std::stack<Command*>();
+    std::stack<std::unique_ptr<Command>> undoStack;
+    std::stack<std::unique_ptr<Command>> redoStack;
 
     char ch;
     while (file.get(ch)) {

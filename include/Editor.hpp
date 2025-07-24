@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include <stack>
+#include <memory>
 #include "Command.hpp"
 
 class Editor {
@@ -8,8 +9,8 @@ private:
     std::list<char> text;
     std::list<char>::iterator cursor;
 
-    std::stack<Command*> undoStack;
-    std::stack<Command*> redoStack;
+    std::stack<std::unique_ptr<Command>> undoStack;
+    std::stack<std::unique_ptr<Command>> redoStack;
 
 public:
     // Constructor
