@@ -1,37 +1,83 @@
 #include "Editor.hpp"
+#include <iostream>
+#include <string>
+#include <sstream>
 
 int main() {
     Editor editor;
+    std::string line;
 
-    editor.insertString("Hi");
-    editor.display();  // Hi|
+    std::cout << "Simple Text Editor (type 'help' to see commands)\n";
 
-    editor.insertChar('!');
-    editor.display();  // Hi!|
+    while (true) {
+        std::cout << "\n> ";
+        std::getline(std::cin, line);
 
-    editor.undo();     // undo '!'
-    editor.display();  // Hi|
+        std::istringstream iss(line);
+        std::string cmd;
+        iss >> cmd;
 
-    editor.undo();     // undo "Hi"
-    editor.display();  // |
+        if (cmd == "insert") {
+            char ch;
+            if (iss >> ch)
+                editor.insertChar(ch);
+            else
+                std::cout << "Usage: insert <char>";
+        }
 
-    editor.redo();     // redo "Hi"
-    editor.display();  // Hi|
+        else if (cmd == "insert_str") {
+            std::string str;
+            if (iss >> str)
+                editor.insertString(str);
+            else
+                std::cout << "Usage: insert_str <string>";
+        }
 
-    editor.redo();     // redo '!'
-    editor.display();  // Hi!|
+        else if (cmd == "delete") {
+            editor.deleteChar();
+        }
+
+        else if (cmd == "move_left") {
+            editor.moveCursorLeft();
+        }
+
+        else if (cmd == "move_right") {
+            editor.moveCursorRight();
+        }
+
+        else if (cmd == "undo") {
+            editor.undo();
+        }
+
+        else if (cmd == "redo") {
+            editor.redo();
+        }
+
+        else if (cmd == "show") {
+            editor.display();
+        }
+
+        else if (cmd == "help") {
+            std::cout << "Available commands:\n"
+                         "  insert <char>\n"
+                         "  insert_str <string>\n"
+                         "  delete\n"
+                         "  move_left\n"
+                         "  move_right\n"
+                         "  undo\n"
+                         "  redo\n"
+                         "  show\n"
+                         "  exit\n";
+        }
+
+        else if (cmd == "exit") {
+            break;
+        }
+
+        else {
+            std::cout << "Unknown command. Type 'help' for list.";
+        }
+    }
 
     return 0;
 }
-
-/*
-
-Hi|
-Hi!|
-Hi|
-|
-Hi|
-Hi!|
-
-
-*/
