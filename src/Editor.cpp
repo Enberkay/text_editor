@@ -1,6 +1,7 @@
 #include "Editor.hpp"
 #include "Command.hpp"
 #include <iostream>
+#include <fstream>
 
 Editor::Editor() {
     text = std::list<char>();
@@ -71,4 +72,38 @@ void Editor::display() {
     if (cursor == text.end())
         std::cout << '|';
     std::cout << '\n';
+}
+
+void Editor::saveToFile(const std::string& filename) {
+    std::ofstream file(filename);
+    if (!file) {
+        std::cerr << "Error: Cannot open file for writing.\n";
+        return;
+    }
+    for (char ch : text) {
+        file << ch;
+    }
+    file.close();
+    std::cout << "Saved to " << filename << "\n";
+}
+
+void Editor::loadFromFile(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "Error: Cannot open file for reading.\n";
+        return;
+    }
+
+    text.clear();
+    undoStack = std::stack<Command*>(); // clear undo/redo
+    redoStack = std::stack<Command*>();
+
+    char ch;
+    while (file.get(ch)) {
+        text.push_back(ch);
+    }
+    cursor = text.end(); // default ให้ cursor ไปท้ายข้อความ
+    file.close();
+
+    std::cout << "Loaded from " << filename << "\n";
 }

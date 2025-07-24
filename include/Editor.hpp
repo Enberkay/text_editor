@@ -24,6 +24,10 @@ public:
 
     void undo();
     void redo();
+
+    void saveToFile(const std::string& filename);
+    void loadFromFile(const std::string& filename);
+
     void display();
 
     friend class InsertCommand;

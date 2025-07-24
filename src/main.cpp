@@ -3,13 +3,15 @@
 #include <string>
 #include <sstream>
 
-int main() {
+int main()
+{
     Editor editor;
     std::string line;
 
     std::cout << "Simple Text Editor (type 'help' to see commands)\n";
 
-    while (true) {
+    while (true)
+    {
         std::cout << "\n> ";
         std::getline(std::cin, line);
 
@@ -17,7 +19,8 @@ int main() {
         std::string cmd;
         iss >> cmd;
 
-        if (cmd == "insert") {
+        if (cmd == "insert")
+        {
             char ch;
             if (iss >> ch)
                 editor.insertChar(ch);
@@ -25,7 +28,8 @@ int main() {
                 std::cout << "Usage: insert <char>";
         }
 
-        else if (cmd == "insert_str") {
+        else if (cmd == "insert_str")
+        {
             std::string str;
             if (iss >> str)
                 editor.insertString(str);
@@ -33,31 +37,56 @@ int main() {
                 std::cout << "Usage: insert_str <string>";
         }
 
-        else if (cmd == "delete") {
+        else if (cmd == "delete")
+        {
             editor.deleteChar();
         }
 
-        else if (cmd == "move_left") {
+        else if (cmd == "move_left")
+        {
             editor.moveCursorLeft();
         }
 
-        else if (cmd == "move_right") {
+        else if (cmd == "move_right")
+        {
             editor.moveCursorRight();
         }
 
-        else if (cmd == "undo") {
+        else if (cmd == "undo")
+        {
             editor.undo();
         }
 
-        else if (cmd == "redo") {
+        else if (cmd == "redo")
+        {
             editor.redo();
         }
 
-        else if (cmd == "show") {
+        else if (cmd == "save")
+        {
+            std::string filename;
+            if (iss >> filename)
+                editor.saveToFile(filename);
+            else
+                std::cout << "Usage: save <filename>";
+        }
+
+        else if (cmd == "load")
+        {
+            std::string filename;
+            if (iss >> filename)
+                editor.loadFromFile(filename);
+            else
+                std::cout << "Usage: load <filename>";
+        }
+
+        else if (cmd == "show")
+        {
             editor.display();
         }
 
-        else if (cmd == "help") {
+        else if (cmd == "help")
+        {
             std::cout << "Available commands:\n"
                          "  insert <char>\n"
                          "  insert_str <string>\n"
@@ -70,11 +99,13 @@ int main() {
                          "  exit\n";
         }
 
-        else if (cmd == "exit") {
+        else if (cmd == "exit")
+        {
             break;
         }
 
-        else {
+        else
+        {
             std::cout << "Unknown command. Type 'help' for list.";
         }
     }
